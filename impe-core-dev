@@ -1,0 +1,64 @@
+pipeline {
+    agent any
+
+    environment{
+        PROJECT="DevOps"
+        JOB_NAME="impe-core-dev"
+        NUM_INSTANCE="1"
+    }
+
+    stages {
+        stage('CHECKOUT') {
+            steps {
+                echo 'checking out'
+            }
+        }
+
+        stage('BUILD') {
+            steps {
+                echo "Building Image"
+            }
+        }
+
+        stage('DEPLOY') {
+
+            environment{
+            JOB_NAME="CORE"
+            }
+
+            steps {
+                sh '''#!/bin/bash
+                    echo 'Deploying'
+                    echo
+                    echo $PROJECT
+                   # export JOB_NAME=report-threatgroup-qa
+                    echo $JOB_NAME
+                    echo $NUM_INSTANCE
+
+                  '''
+            }
+        }
+
+        stage('DEPLOY IMPE-DEV-TOOLS') {
+
+            environment{
+            PROJECT="DevOps"
+            JOB_NAME="impe-core-tools"
+            NUM_INSTANCE="4"
+            }
+
+            steps {
+                sh '''#!/bin/bash
+                    echo 'Deploying to impe-dev-tools'
+                    echo
+                    echo $PROJECT
+                    echo $JOB_NAME
+                    echo $NUM_INSTANCE
+
+                  '''
+            }
+        }
+    }
+}
+
+

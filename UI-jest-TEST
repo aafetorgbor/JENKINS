@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('CHECKOUT') {
+            steps {
+
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/aafetorgbor/JavaScript-unittest-jest.git']]])
+            }
+        }
+
+        stage('RUN UI-TEST') {
+            steps {
+                sh '''#!/bin/bash
+
+                    npm version
+                    echo "jest version:"
+                    npm jest --version
+                    npm test
+
+                  '''
+            }
+        }        
+    }
+}
+
+

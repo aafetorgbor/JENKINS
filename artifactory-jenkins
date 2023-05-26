@@ -1,0 +1,34 @@
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Pull Ubuntu  ') {
+            steps {
+                sh '''#!/bin/bash
+
+                #docker pull image from DockerHub
+                docker pull ubuntu:latest
+
+                #docker tag image
+                docker tag ubuntu:latest emk.jfrog.io/emk-docker-local/ubuntu:lts
+
+                  '''
+            }
+        }
+
+        stage('Push to Artifactory ') {
+            steps {
+                sh '''#!/bin/bash
+
+                #docker push image to artifactory
+                docker push emk.jfrog.io/emk-docker-local/ubuntu:lts
+
+                #docker pull image from artifactory
+                docker pull emk.jfrog.io/emk-docker-local/ubuntu:lts
+
+                  '''
+            }
+        }
+    }
+}

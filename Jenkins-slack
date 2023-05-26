@@ -1,0 +1,75 @@
+pipeline {
+    agent any
+
+environment{
+ 
+    ENVIRONMENT="dev"
+}
+
+
+
+    stages {
+        // Print Hello World
+        stage('Hello') {
+            steps {
+  
+  
+checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/aafetorgbor/nodejs-docker-image.git']]])
+
+
+//stash allowEmpty: true, includes: 'impe_config/tlp-red/impe_config.yaml', name: 'source'
+
+//stash includes: 'impe_config/tlp-red/*', name: 'source'
+
+ dir("impe_config/") {
+      stash includes: "${ENVIRONMENT}/*", name: "source"
+    }
+   sh 'ls'
+ 
+      checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/aafetorgbor/Python-app.git']]])
+ 
+dir('impe/core/config'){
+    unstash 'sourcew'  
+    }
+
+sh 'ls'
+sh 'ls impe/core/config'
+//sh 'ls impe/core/config/tlp-red'
+ sh 'ls impe'
+            }
+        }
+        
+    
+    // Send Slack notification after build
+    
+        stage('SLACK NOTIFICATION SENT'){
+           steps{
+       
+       echo "${ENVIRONMENT}"     
+     
+            echo "Slack Notification SENT"
+           }
+        }
+    
+    }
+    
+    post{
+        
+        success{
+            slackSend color: 'good', message: "BUILD ${currentBuild.currentResult} ${JOB_NAME} - ${BUILD_DISPLAY_NAME} Started, (<${BUILD_URL}|Open>)"
+
+        }
+        
+        failure{
+          //  slackSend color: 'danger', message: "BUILD ${currentBuild.currentResult} ${JOB_NAME} - ${BUILD_DISPLAY_NAME} Started, (<${BUILD_URL}|Open>)"
+
+            slackSend channel: '#dev', color: '#ff0000', message: "BUILD ${currentBuild.currentResult} ${JOB_NAME} - ${BUILD_DISPLAY_NAME} build-url, (<${BUILD_URL}|Open>)", tokenCredentialId: 'slack-to-jenkins-token'
+        }
+        
+        // Clean up the workspace after build
+   //     always{
+    //        cleanWs()
+   //     }
+       
+    }
+}

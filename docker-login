@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+
+    environment{
+        DOCKER_USER = credentials('docker_user')
+        DOCKER_PASSWORD = credentials('docker_password')
+    }
+
+    stages {
+        stage('Docker Login') {
+            steps {
+                sh '''#!/bin/bash
+                    
+                docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+                docker pull ubuntu:18.04
+
+                  '''
+            }
+        }
+    }
+}
+
+
+
+# docker pull login token
+fonzynice
+dckr_pat_ZVkcuCGXD599ieooez_hQ1DRG0s

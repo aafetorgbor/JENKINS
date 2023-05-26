@@ -1,0 +1,42 @@
+version: '3'
+services:
+    postgres:
+        image: postgres:latest
+        restart: always
+        networks:
+          - confluencenet
+        volumes:
+          - ./postgresql:/var/lib/postgresql
+        environment:
+          - POSTGRES_DB=confluence
+          - POSTGRES_USER=confluence
+          - POSTGRES_PASSWORD=confluence
+          - POSTGRES_ENCODING=UNICODE
+          - POSTGRES_COLLATE=C
+          - POSTGRES_COLLATE_TYPE=C
+    confluence:
+        image: atlassian/confluence-server:7.20.1
+        restart: always
+        networks:
+          - confluencenet
+        volumes:
+          - ./confluence-home:/var/atlassian/application-data/confluence
+        ports:
+          - 8090:8090
+networks:
+    confluencenet: {}
+# JDBC URL:  jdbc:postgresql://postgres:5432/confluence
+# db: login: confluence / password: confluence
+# need a Confluence license such as a $10 10 user license or timebomb license
+
+
+
+# 90 days confluence license
+AAABjA0ODAoPeNp1kVFPwjAQx9/7KZb4og/TbsAYJE2EbgtTBsrQGONLWW5Y3TpsN3B+essmQY0mf
+ejdtf+7/+9OAsmNAFYG7hgWHvbcoTUwaLw0bGx30CvU9yAVLwSxHIz72O10LEQLUbKknLEcSFqIj
+1rwBC7XOePZeVLkKClEeq4f8C2QUlaAbiqZPDMFHiuB7IVNbJu4i6b6n1Dgv2+4rL8V9XEOXfxIy
+/7ZJga5BRl6ZEz7gfkY6J8PDvXNcW8SoqyVnjD1TCKKaXBL6ejlbRc5PV6Hy8l44Eq13m0rbtfOK
+LxbvPvi6ua6vAA88marflbdb7rc8gs3eiKtIz0goyBKkK2ruFqpRPJNucfTZPSouiyYSP7x1OjMq
+nwFcp7eKY2WmFabjUsm99IpyxQcyGhz09CL/Zk5tQZWz+53XaQj8jMzl2smuGLNIJC/IiqhCX7zb
+hp9SS/rDTQbpPMo8hc0HE0P0A4rt5EHR4d6H2lWgfZmnO5RGC2Ls6eh4W9ZVjUd0fHaIvkEXGbH2
+zAsAhR0kBcZ8bPqmvgNIbfVdUko59QpIgIUaKIBq5T2dmq71/T6AA560MXJo/w=X02j7
